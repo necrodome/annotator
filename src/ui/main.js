@@ -273,7 +273,8 @@ function main(options) {
                 return authz.permits('delete', ann, ident.who());
             },
             autoViewHighlights: options.element,
-            extensions: options.viewerExtensions
+            extensions: options.viewerExtensions,
+            inactivityDelay: 100
         });
         s.viewer.attach();
 
@@ -293,7 +294,7 @@ function main(options) {
         },
 
         annotationsLoaded: function (anns) { s.highlighter.drawAll(anns); },
-        annotationCreated: function (ann) { s.highlighter.draw(ann); },
+        // annotationCreated: function (ann) { s.highlighter.draw(ann); },
         annotationDeleted: function (ann) { s.highlighter.undraw(ann); },
         annotationUpdated: function (ann) { s.highlighter.redraw(ann); },
 
@@ -302,7 +303,7 @@ function main(options) {
             // completes, and rejected if editing is cancelled. We return it
             // here to "stall" the annotation process until the editing is
             // done.
-            return s.editor.load(annotation, s.interactionPoint);
+            return s.editor.load(annotation, s.interactionPoint, s.highlighter);
         },
 
         beforeAnnotationUpdated: function (annotation) {

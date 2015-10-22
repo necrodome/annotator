@@ -314,7 +314,7 @@ var Editor = exports.Editor = Widget.extend({
     //
     // Returns a Promise that is resolved when the editor is submitted, or
     // rejected if editing is cancelled.
-    load: function (annotation, position) {
+    load: function (annotation, position, highlighter) {
         this.annotation = annotation;
 
         for (var i = 0, len = this.fields.length; i < len; i++) {
@@ -322,9 +322,13 @@ var Editor = exports.Editor = Widget.extend({
             field.load(field.element, this.annotation);
         }
 
+        if(highlighter) {
+          highlighter.draw(annotation);
+        }
+
         var self = this;
         return new Promise(function (resolve, reject) {
-            self.dfd = {resolve: resolve, reject: reject};
+            self.dfd = {resolve: resolve, reject: reject, highlighter: highlighter};
             self.show(position);
         });
     },
@@ -350,6 +354,10 @@ var Editor = exports.Editor = Widget.extend({
     cancel: function () {
         if (typeof this.dfd !== 'undefined' && this.dfd !== null) {
             this.dfd.reject('editing cancelled');
+            var highlighter = this.dfd.highlighter;
+            if (highlighter) {
+              highlighter.undraw(this.annotation);
+            }
         }
         this.hide();
     },
