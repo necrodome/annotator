@@ -146,14 +146,18 @@ var Viewer = exports.Viewer = Widget.extend({
                 self._onEditClick(e);
             })
             .on("click." + NS, '.annotator-delete', function (e) {
-                self._onDeleteClick(e);
+                self._onDeleteClick;
             })
             .on("mouseenter." + NS, function () {
                 self._clearHideTimer();
             })
             .on("mouseleave." + NS, function () {
                 self._startHideTimer();
-            });
+            })
+            .on("click." + NS, '.annotator-hide-i', function (e) {
+                self.hide();
+            })
+
     },
 
     destroy: function () {
@@ -462,8 +466,8 @@ Viewer.itemTemplate = [
     '            title="' + _t('Edit') + '"',
     '            class="annotator-edit">' + _t('Edit') + '</button>',
     '    <button type="button"',
-    '            title="' + _t('Delete') + '"',
-    '            class="annotator-delete">' + _t('Delete') + '</button>',
+    '            title="' + _t('Hide') + '"',
+    '            class="annotator-hide-i">' + _t('Hide') + '</button>',
     '  </span>',
     '</li>'
 ].join('\n');

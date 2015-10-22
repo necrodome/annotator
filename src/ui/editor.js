@@ -228,6 +228,7 @@ var Editor = exports.Editor = Widget.extend({
 
         this.fields = [];
         this.annotation = {};
+        this.app = options.app;
 
         if (this.options.defaultFields) {
             this.addField({
@@ -253,6 +254,12 @@ var Editor = exports.Editor = Widget.extend({
             })
             .on("click." + NS, '.annotator-cancel', function (e) {
                 self._onCancelClick(e);
+            })
+            .on("click." + NS, '.annotator-delete', function (e) {
+                if (window.confirm(_t('Delete this annotation?'))) {
+                  self.app.annotations['delete'](self.annotation);
+                  self.hide();
+                }
             })
             .on("mouseover." + NS, '.annotator-cancel', function (e) {
                 self._onCancelMouseover(e);
@@ -570,9 +577,10 @@ Editor.template = [
     '  <form class="annotator-widget">',
     '    <ul class="annotator-listing"></ul>',
     '    <div class="annotator-controls">',
-    '     <a href="#cancel" class="annotator-cancel">' + _t('Cancel') + '</a>',
-    '      <a href="#save"',
+    '     <a href="#save"',
     '         class="annotator-save annotator-focus">' + _t('Save') + '</a>',
+    '     <a href="#cancel" class="annotator-cancel">' + _t('Cancel') + '</a>',
+    '     <a href="#del" class="annotator-delete">' + 'Delete' + '</a>',
     '    </div>',
     '  </form>',
     '</div>'
